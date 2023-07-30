@@ -1,10 +1,10 @@
 import psycopg2
 
 
-# connect to "chinook" database 
+# connect to "chinook" database
 connection = psycopg2.connect(database="chinook")
 
-#build a cursor object of the db 
+# build a cursor object of the db
 cursor = connection.cursor()
 
 # # Query 1 - select all records from the "artist" table
