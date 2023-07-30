@@ -9,9 +9,8 @@ from sqlalchemy.orm import sessionmaker
 db = create_engine("postgresql:///chinook")
 base = declarative_base()
 
+
 # create a class-based model for the "Programmer" table
-
-
 class Programmer(base):
     __tablename__ = "Programmer"
     id = Column(Integer, primary_key=True)
@@ -25,7 +24,6 @@ class Programmer(base):
 # instead of connecting to the database directly, we will ask for a session
 # create a new instance of sessionmaker, then point to our engine (the db)
 Session = sessionmaker(db)
-
 # opens an actual session by calling the Session() subclass defined above
 session = Session()
 
@@ -33,7 +31,7 @@ session = Session()
 base.metadata.create_all(db)
 
 
-# creating records on our Programmer table
+# creating records on our Progammer table
 ada_lovelace = Programmer(
     first_name="Ada",
     last_name="Lovelace",
@@ -74,7 +72,6 @@ bill_gates = Programmer(
     famous_for="Microsoft"
 )
 
-
 tim_berners_lee = Programmer(
     first_name="Tim",
     last_name="Berners-Lee",
@@ -83,13 +80,12 @@ tim_berners_lee = Programmer(
     famous_for="World Wide Web"
 )
 
-
 jamie_bonner = Programmer(
     first_name="Jamie",
     last_name="Bonner",
     gender="M",
     nationality="British",
-    famous_for="Code Institute"
+    famous_for="Code Institute Diploma"
 )
 
 # add each instance of our programmers to our session
@@ -101,12 +97,48 @@ jamie_bonner = Programmer(
 # session.add(tim_berners_lee)
 # session.add(jamie_bonner)
 
+# # updating a single record
+# programmer = session.query(Programmer).filter_by(id=9).first()
+# programmer.famous_for = "World President"
+
+# updating multiple records
+# people = session.query(Programmer)
+# for person in people:
+#     if person.gender == "F":
+#         person.gender = "Female"
+#     elif person.gender == "M":
+#         person.gender = "Male"
+#     else:
+#         print("Gender not defined")
+#     session.commit()
+
+
+# deleting a single record
+fname = input("Enter a first name: ")
+lname = input("Enter a last name: ")
+programmer = session.query(Programmer).filter_by(
+    first_name=fname, last_name=lname).first()
+
+# defensive programming
+if programmer is not None:
+    print
+    ("Programmer Found", programmer.first_name + " " + programmer.last_name)
+    confirmation = input("Are you sure you want to delete this record? (y/n) ")
+    if confirmation.lower() == "y":
+        session.delete(programmer)
+        session.commit()
+        print("Programmer has been deleted")
+    else:
+        print("Programmer not deleted")
+else:
+    print("No records found")
+
 
 # commit our session to the database
-session.commit()
+# session.commit()
 
 
-# query the database to find all programmers
+# query the database to find all Programmers
 programmers = session.query(Programmer)
 for programmer in programmers:
     print(
